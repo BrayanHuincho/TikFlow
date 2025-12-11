@@ -215,11 +215,22 @@
     <script>
         lucide.createIcons();
 
-        // PWA Config
+        // PWA Config (AHORA CON SHARE TARGET)
         const pwaManifest = {
             "name": "TikFlow", "short_name": "TikFlow", "start_url": ".", "display": "standalone",
             "background_color": "#000000", "theme_color": "#000000", "orientation": "portrait",
-            "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "512x512", "type": "image/png"}]
+            "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "512x512", "type": "image/png"}],
+            // ESTO ES LO NUEVO QUE HACE LA MAGIA:
+            "share_target": {
+                "action": "./", 
+                "method": "GET",
+                "enctype": "application/x-www-form-urlencoded",
+                "params": {
+                    "title": "title",
+                    "text": "text",
+                    "url": "url"
+                }
+            }
         };
         const blob = new Blob([JSON.stringify(pwaManifest)], {type: 'application/json'});
         document.querySelector('#manifest-placeholder').setAttribute('href', URL.createObjectURL(blob));
@@ -249,6 +260,29 @@
             } else {
                 btnClear.classList.add('hidden');
                 btnPaste.classList.remove('hidden');
+            }
+        });
+
+        // NUEVO: DETECTAR ENLACE AL ABRIR LA APP DESDE COMPARTIR
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            // TikTok a veces envía el link en 'text', a veces en 'url'
+            const sharedText = params.get('text') || params.get('url') || params.get('title');
+            
+            if (sharedText) {
+                // Buscamos cualquier enlace en el texto (ej: "Mira este video https://...")
+                const urlMatch = sharedText.match(/(https?:\/\/[^\s]+)/);
+                if (urlMatch) {
+                    inputUrl.value = urlMatch[0];
+                    btnClear.classList.remove('hidden');
+                    btnPaste.classList.add('hidden');
+                    
+                    // Ejecutamos la búsqueda automáticamente
+                    handleSearch();
+                    
+                    // Limpiamos la URL del navegador para que quede bonita
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
             }
         });
 
@@ -407,5 +441,3 @@
     </script>
 </body>
 </html>
-
-
