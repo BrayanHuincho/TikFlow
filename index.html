@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>TikFlow</title>
     
-    <!-- PWA -->
+    <!-- PWA Setup -->
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="canonical" href="https://tikflow-app.vercel.app/" />
     <link id="manifest-placeholder" rel="manifest" href="">
 
     <!-- Fuente -->
@@ -16,7 +18,6 @@
     <!-- Librerías -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Librería de Confeti (Super ligera) -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
@@ -42,76 +43,38 @@
 
     <style>
         html, body {
-            overflow-x: hidden;
-            width: 100%;
-            background-color: #000000;
-            color: white;
-            overscroll-behavior-y: none;
-            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden; width: 100%; background-color: #000000; color: white;
+            overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent;
             transition: background-image 1s ease-in-out;
         }
-
-        /* Fondo Dinámico (Ambient Mode) */
         #ambient-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0; /* Empieza invisible */
-            z-index: -2;
-            transition: opacity 1s ease, transform 5s ease;
-            filter: blur(40px) brightness(0.4);
-            transform: scale(1.1);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center; opacity: 0;
+            z-index: -2; transition: opacity 1s ease, transform 5s ease;
+            filter: blur(40px) brightness(0.4); transform: scale(1.1);
         }
-
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); transition: transform 0.3s ease;
         }
-
         .btn-main {
             background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
-            background-size: 200% 200%;
-            transition: all 0.5s ease;
+            background-size: 200% 200%; transition: all 0.5s ease;
         }
         .btn-main:active { transform: scale(0.95); }
-
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        
-        .glow-effect {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(0, 242, 234, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -100px; left: -100px; border-radius: 50%; filter: blur(80px); z-index: -1;
-        }
-        .glow-effect-2 {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(255, 0, 80, 0.15) 0%, rgba(0,0,0,0) 70%);
-            bottom: -50px; right: -100px; border-radius: 50%; filter: blur(80px); z-index: -1;
-        }
-
         .skeleton {
             background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
+            background-size: 200% 100%; animation: skeleton-loading 1.5s infinite;
         }
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center pt-16 p-4">
 
-    <!-- FONDO AMBIENTE DINÁMICO -->
     <div id="ambient-bg"></div>
-    
-    <!-- Luces decorativas base -->
-    <div class="glow-effect animate-pulse"></div>
-    <div class="glow-effect-2 animate-pulse"></div>
+    <div class="fixed w-[300px] h-[300px] bg-brand-cyan/20 blur-[100px] rounded-full top-[-100px] left-[-100px] animate-pulse"></div>
+    <div class="fixed w-[300px] h-[300px] bg-brand-pink/20 blur-[100px] rounded-full bottom-[-50px] right-[-100px] animate-pulse"></div>
 
     <!-- Header -->
     <nav class="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-20">
@@ -124,13 +87,12 @@
             <span class="font-bold text-xl tracking-wide">Tik<span class="text-brand-cyan">Flow</span></span>
         </div>
         <button id="pwa-install-btn" class="hidden bg-white/10 px-3 py-1 rounded-full border border-white/10 text-[10px] font-bold text-white hover:bg-white/20 transition animate-bounce">
-            📲 INSTALAR APP
+            📲 INSTALAR
         </button>
     </nav>
 
     <main class="w-full max-w-md flex flex-col gap-6 mb-20 z-10">
         
-        <!-- Hero Title -->
         <div class="text-center space-y-2 animate-float">
             <h1 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
                 <span class="text-white">Pegar y</span><br>
@@ -144,14 +106,10 @@
             <div class="relative bg-dark-200/50 rounded-2xl p-1 border border-white/5 focus-within:border-brand-cyan/50 transition-colors">
                 <div class="flex items-center">
                     <div class="pl-4 text-gray-500"><i data-lucide="link-2" class="w-5 h-5"></i></div>
-                    
-                    <input type="text" id="tiktok-url" placeholder="Pega el enlace..." class="w-full bg-transparent text-white p-4 outline-none font-medium text-sm placeholder-gray-500" onkeydown="if(event.key === 'Enter') handleSearch()" autocomplete="off">
-                    
-                    <!-- BOTÓN PEGAR -->
+                    <input type="text" id="tiktok-url" placeholder="Enlace de TikTok..." class="w-full bg-transparent text-white p-4 outline-none font-medium text-sm placeholder-gray-500" onkeydown="if(event.key === 'Enter') handleSearch()" autocomplete="off">
                     <button id="btn-paste" onclick="handlePaste()" class="p-2 mr-1 text-xs bg-white/10 hover:bg-white/20 text-brand-cyan font-bold rounded-lg transition-colors flex items-center gap-1 cursor-pointer z-20">
                         <span>PEGAR</span>
                     </button>
-
                     <button id="btn-clear" onclick="clearInput()" class="hidden p-2 text-gray-500 hover:text-white mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
             </div>
@@ -160,12 +118,8 @@
             </button>
         </div>
 
-        <!-- Error Msg -->
-        <div id="error-msg" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 bg-red-500/90 backdrop-blur text-white text-sm font-bold py-3 px-6 rounded-full shadow-2xl z-50 animate-bounce w-max">
-            Enlace no válido.
-        </div>
+        <div id="error-msg" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 bg-red-500/90 backdrop-blur text-white text-sm font-bold py-3 px-6 rounded-full shadow-2xl z-50 animate-bounce w-max">Enlace no válido.</div>
 
-        <!-- Skeleton Loader -->
         <div id="skeleton-card" class="hidden glass-card rounded-3xl p-5 border-t border-white/5">
             <div class="flex items-center gap-4 mb-5">
                 <div class="skeleton w-12 h-12 rounded-full flex-shrink-0"></div>
@@ -175,7 +129,6 @@
             <div class="skeleton h-12 w-full rounded-xl"></div>
         </div>
 
-        <!-- Result Card -->
         <div id="result-card" class="hidden glass-card rounded-3xl p-5 border-t border-brand-cyan/20 animate-[fadeIn_0.5s_ease-out]">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-3">
@@ -185,16 +138,12 @@
                         <p id="res-id" class="text-gray-400 text-xs truncate">@usuario</p>
                     </div>
                 </div>
-                <!-- BOTÓN COMPARTIR -->
-                <button onclick="shareApp()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors" title="Compartir herramienta">
-                    <i data-lucide="share-2" class="w-5 h-5 text-white"></i>
-                </button>
+                <button onclick="shareApp()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors"><i data-lucide="share-2" class="w-5 h-5 text-white"></i></button>
             </div>
 
             <div class="relative w-full aspect-[9/16] bg-black rounded-2xl overflow-hidden mb-4 group shadow-2xl border border-white/10">
                 <video id="res-video-preview" class="w-full h-full object-contain" playsinline loop controls controlsList="download">
                     <source id="res-video-source" src="" type="video/mp4">
-                    Tu navegador no soporta video.
                 </video>
             </div>
             
@@ -207,49 +156,79 @@
                 <span>Descargar solo Audio (MP3)</span>
             </a>
 
-            <button onclick="resetApp()" class="w-full mt-5 text-gray-600 text-xs font-bold hover:text-white uppercase tracking-widest py-2">
-                Buscar otro video
-            </button>
+            <button onclick="resetApp()" class="w-full mt-5 text-gray-600 text-xs font-bold hover:text-white uppercase tracking-widest py-2">Buscar otro</button>
         </div>
     </main>
+
+    <!-- Debug Status -->
+    <div id="pwa-status" class="fixed bottom-2 right-2 text-[8px] text-gray-600 opacity-50 font-mono">
+        PWA Init...
+    </div>
 
     <script>
         lucide.createIcons();
 
-        // 1. REGISTRAR UN SERVICE WORKER "DUMMY"
-        // Esto es obligatorio para que Android considere la web como una "WebAPK" real 
-        // y active la integración profunda (como el menú Compartir).
+        // 1. SERVICE WORKER FORZADO (CON MANEJO DE ERRORES PARA PREVIEW)
         if ('serviceWorker' in navigator) {
-            // Creamos un Service Worker vacío en memoria
-            const swCode = `
-                self.addEventListener('install', (e) => e.waitUntil(self.skipWaiting()));
-                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
-                self.addEventListener('fetch', (e) => {}); 
-            `;
-            const swBlob = new Blob([swCode], {type: 'application/javascript'});
-            const swUrl = URL.createObjectURL(swBlob);
-            
-            navigator.serviceWorker.register(swUrl)
-                .then(() => console.log('✅ PWA Instalable Lista'))
-                .catch(err => console.log('❌ Error SW', err));
+            try {
+                const swContent = `
+                    self.addEventListener('install', (e) => {
+                        self.skipWaiting();
+                    });
+                    self.addEventListener('activate', (e) => {
+                        e.waitUntil(self.clients.claim());
+                    });
+                    self.addEventListener('fetch', (e) => {});
+                `;
+                const blob = new Blob([swContent], { type: 'text/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                // Intentamos registrar solo si el protocolo no es data o blob iframe restringido
+                if (window.location.protocol.startsWith('http')) {
+                    navigator.serviceWorker.register(swUrl, { scope: './' })
+                        .then(reg => {
+                            console.log('✅ SW Registrado:', reg.scope);
+                            document.getElementById('pwa-status').innerText = 'SW: OK 🟢';
+                            document.getElementById('pwa-status').classList.add('text-green-500');
+                        })
+                        .catch(err => {
+                            console.warn('⚠️ SW Warning:', err);
+                            document.getElementById('pwa-status').innerText = 'SW: WEB (NO PWA) 🟠';
+                        });
+                } else {
+                     document.getElementById('pwa-status').innerText = 'SW: PREVIEW MODE ⚪';
+                }
+            } catch (e) {
+                console.log("Service Worker skipped in preview");
+            }
         }
 
-        // 2. CONFIGURACIÓN PWA COMPLETA
+        // 2. MANIFIESTO PWA OPTIMIZADO PARA ANDROID
         const pwaManifest = {
             "name": "TikFlow",
             "short_name": "TikFlow",
-            "id": "/tikflow-v2", // ID único para evitar conflictos con versiones viejas
-            "start_url": "./",
-            "scope": "./",
+            "id": "/tikflow-pro", // ID Nuevo para forzar actualización
+            "start_url": "./index.html", // Explícito
             "display": "standalone",
             "background_color": "#000000",
             "theme_color": "#000000",
+            "description": "Descarga videos de TikTok sin marca de agua.",
             "orientation": "portrait",
             "icons": [
-                {"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "192x192", "type": "image/png"},
-                {"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "512x512", "type": "image/png"}
+                {
+                    "src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png",
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any maskable" // CRÍTICO: "maskable" es obligatorio para Android modernos
+                },
+                {
+                    "src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png",
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                }
             ],
-            // ESTO ES LO QUE HACE QUE APAREZCA EN "COMPARTIR"
+            // CONFIGURACIÓN EXACTA DE SHARE TARGET
             "share_target": {
                 "action": "./", 
                 "method": "GET",
@@ -261,8 +240,8 @@
                 }
             }
         };
-        const blob = new Blob([JSON.stringify(pwaManifest)], {type: 'application/json'});
-        document.querySelector('#manifest-placeholder').setAttribute('href', URL.createObjectURL(blob));
+        const manifestBlob = new Blob([JSON.stringify(pwaManifest)], {type: 'application/json'});
+        document.querySelector('#manifest-placeholder').setAttribute('href', URL.createObjectURL(manifestBlob));
 
         // Elements
         const inputUrl = document.getElementById('tiktok-url');
@@ -270,37 +249,32 @@
         const btnPaste = document.getElementById('btn-paste');
         const btnSearch = document.getElementById('btn-search');
         const errorMsg = document.getElementById('error-msg');
-        
         const skeletonCard = document.getElementById('skeleton-card');
         const resultCard = document.getElementById('result-card');
         const ambientBg = document.getElementById('ambient-bg');
-        
         const resAvatar = document.getElementById('res-avatar');
         const resAuthor = document.getElementById('res-author');
         const resId = document.getElementById('res-id');
         const resVideoPreview = document.getElementById('res-video-preview');
         const btnDlAudio = document.getElementById('btn-dl-audio');
 
-        // 3. DETECTOR DE COMPARTIDOS
+        // 3. AUTO-DETECCIÓN INTELIGENTE
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const sharedText = params.get('text') || params.get('url') || params.get('title');
             
             if (sharedText) {
-                // Extraer URL si viene mezclada con texto
                 const urlMatch = sharedText.match(/(https?:\/\/[^\s]+)/);
                 if (urlMatch) {
                     inputUrl.value = urlMatch[0];
                     btnClear.classList.remove('hidden');
                     btnPaste.classList.add('hidden');
                     handleSearch();
-                    // Limpiar URL
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
         });
 
-        // Logic Standard
         inputUrl.addEventListener('input', (e) => {
             if(e.target.value) {
                 btnClear.classList.remove('hidden');
@@ -336,68 +310,32 @@
             resultCard.classList.add('hidden');
             resVideoPreview.pause();
             resVideoPreview.src = "";
-            // Resetear Fondo Ambiente
             ambientBg.style.opacity = '0';
-            setTimeout(() => { ambientBg.style.backgroundImage = 'none'; }, 1000);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- FUNCIÓN COMPARTIR MEJORADA ---
         function shareApp() {
-            // ⚠️ AQUÍ ESTÁ EL TRUCO: Pon tu link real de GitHub
-            // Si compartes 'window.location.href' desde tu archivo local, 
-            // a tus amigos les saldrá error.
             const myPublicUrl = 'https://github.com/BrayanHuincho/TikFlow'; 
-            
             const shareData = {
                 title: 'TikFlow Premium',
                 text: '⚡ Descarga TikToks sin marca de agua en HD.',
                 url: myPublicUrl 
             };
-
-            if (navigator.share) {
-                navigator.share(shareData).catch(err => console.log('Error al compartir', err));
-            } else {
-                // Fallback para PC: Copiar al portapapeles
-                navigator.clipboard.writeText(myPublicUrl).then(() => {
-                    alert('Enlace copiado: ' + myPublicUrl);
-                });
-            }
+            if (navigator.share) navigator.share(shareData).catch(err => console.log('Error', err));
+            else navigator.clipboard.writeText(myPublicUrl).then(() => alert('Enlace copiado'));
         }
 
-        // FUNCIÓN CONFETI
         function triggerConfetti() {
-            var count = 200;
-            var defaults = {
-                origin: { y: 0.7 },
-                colors: ['#00f2ea', '#ff0050', '#ffffff'] // Colores de la marca
-            };
-
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
-            }
-
-            fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#00f2ea', '#ff0050'] });
         }
 
         async function handleSearch() {
             const url = inputUrl.value.trim();
-            if (!url.includes('tiktok.com')) {
-                showError('Enlace inválido');
-                return;
-            }
+            if (!url.includes('tiktok.com')) { showError('Enlace inválido'); return; }
 
             resultCard.classList.add('hidden');
             skeletonCard.classList.remove('hidden');
             btnSearch.disabled = true;
             btnSearch.classList.add('opacity-50');
-            // Reset bg if needed
             ambientBg.style.opacity = '0';
 
             try {
@@ -406,29 +344,22 @@
 
                 if (data.code === 0) {
                     const v = data.data;
-
                     resAvatar.src = v.author.avatar;
                     resAuthor.textContent = v.author.nickname;
                     resId.textContent = '@' + v.author.unique_id;
-                    
-                    resVideoPreview.poster = v.cover;
-                    resVideoPreview.src = v.play;
-                    resVideoPreview.load();
-                    
+                    const vid = resVideoPreview;
+                    vid.poster = v.cover;
+                    vid.src = v.play;
+                    vid.load();
                     btnDlAudio.href = v.music;
 
-                    // --- ACTIVAR EFECTOS PREMIUM ---
-                    // 1. Ambient Mode (Fondo Borroso)
                     ambientBg.style.backgroundImage = `url(${v.cover})`;
                     ambientBg.style.opacity = '1';
-                    
-                    // 2. Disparar Confeti
                     triggerConfetti();
 
                     skeletonCard.classList.add('hidden');
                     resultCard.classList.remove('hidden');
                     resultCard.scrollIntoView({ behavior: 'smooth' });
-                    
                 } else {
                     showError('Video no encontrado');
                     skeletonCard.classList.add('hidden');
@@ -443,11 +374,11 @@
         }
 
         function showError(msg) {
-            errorMsg.textContent = msg;
-            errorMsg.classList.remove('hidden');
+            errorMsg.textContent = msg; errorMsg.classList.remove('hidden');
             setTimeout(() => errorMsg.classList.add('hidden'), 3000);
         }
         
+        // PWA Install Prompt
         let deferredPrompt;
         const installBtn = document.getElementById('pwa-install-btn');
         window.addEventListener('beforeinstallprompt', (e) => {
