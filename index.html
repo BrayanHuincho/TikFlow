@@ -123,8 +123,8 @@
             </div>
             <span class="font-bold text-xl tracking-wide">Tik<span class="text-brand-cyan">Flow</span></span>
         </div>
-        <button id="pwa-install-btn" class="hidden bg-white/10 px-3 py-1 rounded-full border border-white/10 text-[10px] font-bold text-white hover:bg-white/20 transition animate-bounce">
-            📲 INSTALAR APP
+        <button id="pwa-install-btn" class="hidden bg-white/10 px-3 py-1 rounded-full border border-white/10 text-[10px] font-bold text-white hover:bg-white/20 transition">
+            INSTALAR
         </button>
     </nav>
 
@@ -133,10 +133,9 @@
         <!-- Hero Title -->
         <div class="text-center space-y-2 animate-float">
             <h1 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
-                <span class="text-white">Pegar y</span><br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-pink">Descargar</span>
+                <span class="text-white">Descargas</span><br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-pink">Sin Marca</span>
             </h1>
-            <p class="text-xs text-gray-500 font-medium">Comparte desde TikTok a esta App</p>
         </div>
 
         <!-- Search Box -->
@@ -216,50 +215,11 @@
     <script>
         lucide.createIcons();
 
-        // 1. REGISTRAR UN SERVICE WORKER "DUMMY"
-        // Esto es obligatorio para que Android considere la web como una "WebAPK" real 
-        // y active la integración profunda (como el menú Compartir).
-        if ('serviceWorker' in navigator) {
-            // Creamos un Service Worker vacío en memoria
-            const swCode = `
-                self.addEventListener('install', (e) => e.waitUntil(self.skipWaiting()));
-                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
-                self.addEventListener('fetch', (e) => {}); 
-            `;
-            const swBlob = new Blob([swCode], {type: 'application/javascript'});
-            const swUrl = URL.createObjectURL(swBlob);
-            
-            navigator.serviceWorker.register(swUrl)
-                .then(() => console.log('✅ PWA Instalable Lista'))
-                .catch(err => console.log('❌ Error SW', err));
-        }
-
-        // 2. CONFIGURACIÓN PWA COMPLETA
+        // PWA Config
         const pwaManifest = {
-            "name": "TikFlow",
-            "short_name": "TikFlow",
-            "id": "/tikflow-v2", // ID único para evitar conflictos con versiones viejas
-            "start_url": "./",
-            "scope": "./",
-            "display": "standalone",
-            "background_color": "#000000",
-            "theme_color": "#000000",
-            "orientation": "portrait",
-            "icons": [
-                {"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "192x192", "type": "image/png"},
-                {"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "512x512", "type": "image/png"}
-            ],
-            // ESTO ES LO QUE HACE QUE APAREZCA EN "COMPARTIR"
-            "share_target": {
-                "action": "./", 
-                "method": "GET",
-                "enctype": "application/x-www-form-urlencoded",
-                "params": {
-                    "title": "title",
-                    "text": "text",
-                    "url": "url"
-                }
-            }
+            "name": "TikFlow", "short_name": "TikFlow", "start_url": ".", "display": "standalone",
+            "background_color": "#000000", "theme_color": "#000000", "orientation": "portrait",
+            "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", "sizes": "512x512", "type": "image/png"}]
         };
         const blob = new Blob([JSON.stringify(pwaManifest)], {type: 'application/json'});
         document.querySelector('#manifest-placeholder').setAttribute('href', URL.createObjectURL(blob));
@@ -281,26 +241,7 @@
         const resVideoPreview = document.getElementById('res-video-preview');
         const btnDlAudio = document.getElementById('btn-dl-audio');
 
-        // 3. DETECTOR DE COMPARTIDOS
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const sharedText = params.get('text') || params.get('url') || params.get('title');
-            
-            if (sharedText) {
-                // Extraer URL si viene mezclada con texto
-                const urlMatch = sharedText.match(/(https?:\/\/[^\s]+)/);
-                if (urlMatch) {
-                    inputUrl.value = urlMatch[0];
-                    btnClear.classList.remove('hidden');
-                    btnPaste.classList.add('hidden');
-                    handleSearch();
-                    // Limpiar URL
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
-            }
-        });
-
-        // Logic Standard
+        // Logic
         inputUrl.addEventListener('input', (e) => {
             if(e.target.value) {
                 btnClear.classList.remove('hidden');
